@@ -1,0 +1,37 @@
+cat << EOF | kubectl create -f -
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+   name: google-storage
+provisioner: kubernetes.io/gce-pd
+EOF
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: myclaim
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: google-storage       
+  resources:
+   requests:
+     storage: 500Mi
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+spec:
+  containers:
+    - name: myfrontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/var/www/html"
+        name: mypd
+  volumes:
+    - name: mypd
+      persistentVolumeClaim:
+        claimName: myclaim
+

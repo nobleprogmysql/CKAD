@@ -1,9 +1,6 @@
-# Clone the code repo by running command: git clone https://github.com/nobleprogdwpterraform/cka-kubernetes-administrator.git
-# go to Downloads and code repository (cka)
-# run vagrant up (to bring 3 nodes up, 1 master node and 2 worker nodes setup)
-
-
-# Below is kubernetes cluster setup commands 
+# Destroy existing VMs for new cluster with v1.31 setup
+vagrant destroy --force
+vagrant up
 
 # 1. Update the apt package index and install packages needed to use the Kubernetes apt repository
 {
@@ -45,18 +42,13 @@ sudo apt-get install -y containerd
 # 6. restart
 sudo systemctl restart containerd
 
-# 7. kubernetes latest version
-KUBE_LATEST=$(curl -L -s https://dl.k8s.io/release/stable.txt | awk 'BEGIN { FS="." } { printf "%s.%s", $1, $2 }')
-KUBE_LATEST=1.31
+# 7.Adding Kubernetes APT Repository to Sources List
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 # 8. Adding Kubernetes APT Repository GPG Key
 {
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 }
-
-# 9. Adding Kubernetes APT Repository to Sources List
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBE_LATEST}/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 # 10. install kubelet kubeadm and kubectl
 {

@@ -1,0 +1,32 @@
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Service
+metadata:
+ name: backend
+spec:
+ type: ClusterIP
+ ports:
+ - targetPort: 80
+   port: 80
+ selector:
+   app: myapp
+   type: backend
+EOF
+
+ # Imparative commands for certification help
+	- If you simply want to test your command , use the --dry-run=client option. 
+	   -o yaml: This will output the resource definition in YAML format on screen.
+	    kubectl run nginx --image=nginx --dry-run=client -o yaml
+
+	- Create a deployment: kubectl create deployment --image=nginx nginx
+	- Generate Deployment YAML file: kubectl create deployment --image=nginx nginx --dry-run=client -o yaml
+	- Generate Deployment with 4 Replicas: kubectl create deployment --image=nginx nginx --dry-run=client --replicas=4 -o yaml >> deployment.yaml
+	- kubectl scale command: kubectl scale deployment nginx --relicas=4
+	- Create a Service named redis-service of type ClusterIP to expose pod redis on port 6379:
+    kubectl run redis --image=redis
+		kubectl expose pod redis --port=6739 --name redis-server --dry-run=client -o yaml
+  - create a service of type ClusterIP by the same name (httpd). The target port for the service should be 80
+		kubectl run nginx --image=nginx --port=80 --expose
+    kubectl expose pod nginx --port=80 --name nginx-nodeport
+
+    ip addr

@@ -1,0 +1,34 @@
+
+
+Pod DNS Record
+
+To create a namespace
+kubectl create ns apps
+
+# To create a Pod
+kubectl run nginx --image=nginx --namespace apps
+
+# To get the additional information of the Pod in the namespace "apps"
+kubectl get po -n apps -o wide
+
+# To get the dns record of the nginx Pod from the default namespace
+# replace . with - in ip address of nginx pod
+kubectl run -it test --image=busybox:1.28 --rm --restart=Never -- nslookup 10-47-0-1.apps.pod.cluster.local
+
+
+Service DNS Record:
+The following DNS resolution:
+<service-name>.<namespace-name>.svc.cluster.local
+
+# Expose the nginx Pod
+kubectl expose pod nginx --name=nginx-service --port 80 --namespace apps
+
+# Get the nginx-service in the namespace "apps"
+kubectl get svc -n apps
+
+# To get the dns record of the nginx-service from the default namespace
+kubectl run -it test --image=busybox:1.28 --rm --restart=Never -- nslookup nginx-service.apps.svc.cluster.local
+
+# Accessing with curl command
+kubectl run -it nginx-test --image=nginx --rm --restart=Never -- curl -Is http://nginx-service.apps.svc.cluster.local
+

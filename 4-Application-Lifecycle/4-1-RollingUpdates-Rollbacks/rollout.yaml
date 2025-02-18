@@ -1,0 +1,45 @@
+
+cat << EOF | kubectl create -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+  replicas: 3
+  selector:
+    matchLabels:
+      type: front-end
+EOF
+
+kubectl apply -f deployment.yaml
+kubectl rollout status deployment/myapp-deployment
+
+# update image to nginx:1.7.1
+kubectl set image deployment/myapp-deployment nginx-container=nginx:1.7.1
+# check rollout history
+kubectl rollout history deployment/myapp-deployment
+
+# to see new replicaset created
+kubectl get rs 
+
+# to check updated image
+kubectl get pod myapp-deployment-podname -o yaml 
+
+#  to see rollout strategy 
+kubectl describe deployment myapp-deployment
+
+# to rollback to previous version
+kubectl rollout undo deployment/myapp-deployment

@@ -1,0 +1,10 @@
+# Installing metrics server
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl edit deployment -n kube-system metrics-server
+- --kubelet-insecure-tls=true
+
+# Viewing Metrics
+kubectl top node
+
+# Checking application logs
+kubectl logs -f pod-name container-name

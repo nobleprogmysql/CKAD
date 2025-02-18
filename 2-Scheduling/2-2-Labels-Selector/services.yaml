@@ -1,0 +1,48 @@
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Service
+metadata:
+ name: myapp-service
+spec:
+ type: NodePort
+ ports:
+ - targetPort: 80
+   port: 80
+   nodePort: 30008
+ selector:
+   app: myapp
+   type: web
+EOF
+
+
+cat <<EOF | kubectl create -f -
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-replicaset
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+      type: front-end
+EOF
+
+- To select pod with lables: 
+		kubectl get pods --show-labels
+		kubectl get pod --selector app=myapp,type=front-end	
+- To select all objects for given label:
+		 kubectl get all --selector app=myapp,type=front-end --no-headers | wc -l

@@ -1,0 +1,2 @@
+# kubectl get pods -n kube-system
+ sudo cat /etc/kubernetes/manifests/kube-apiserver.yaml

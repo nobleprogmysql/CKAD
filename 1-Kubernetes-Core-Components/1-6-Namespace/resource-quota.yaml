@@ -1,0 +1,40 @@
+cat <<EOF>> resource-quota.yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: compute-quota
+  namespace: dev
+spec:
+  hard:
+    pods: "10"
+    requests.cpu: "1"
+    requests.memory: 5Gi
+    limits.cpu: "2"
+    limits.memory: 10Gi
+EOF
+
+kubectl get quota --namespace=dev
+kubectl delete quota compute-quota
+
+cat <<EOF | kubectl create -f - 
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: dev
+  name: simple-webapp
+  labels:
+    name: simple-webapp
+spec:
+ containers:
+ - name: nginx
+   image: nginx
+   ports:
+    - containerPort:  8080
+   resources:
+     requests:
+      memory: "60Mi"
+      cpu: "1"
+     limits:
+       memory: "100Mi"
+       cpu: "2"
+EOF

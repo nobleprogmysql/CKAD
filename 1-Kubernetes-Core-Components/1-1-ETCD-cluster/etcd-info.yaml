@@ -1,0 +1,4 @@
+kubectl get pods -n kube-system
+kubectl exec -n=kube-system etcd-controlplane -- etcdctl version
+
+kubectl exec etcd-controlplane -n kube-system -- sh -c "etcdctl get / --prefix --keys-only --limit=10 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/server.crt  --key /etc/kubernetes/pki/etcd/server.key" 

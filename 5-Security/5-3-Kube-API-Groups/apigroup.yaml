@@ -1,0 +1,4 @@
+kubectl proxy --api-prefix=/
+http://localhost:8001/api/v1/pods /apis/apps/v1/deployments
+
+curl http://localhost:8001/api/v1/namespaces

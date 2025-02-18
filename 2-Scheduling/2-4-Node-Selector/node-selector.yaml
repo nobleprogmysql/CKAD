@@ -1,0 +1,20 @@
+kubectl label nodes node01 size=Large
+
+kubectl label nodes node02 size=Medium
+
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+ name: myapp-pod
+spec:
+ containers:
+ - name: nginx-container
+   image: nginx
+ nodeSelector:
+  size: Large
+EOF
+
+# Remove node lable
+kubectl label nodes node01 size-
+kubectl label nodes node02 size-

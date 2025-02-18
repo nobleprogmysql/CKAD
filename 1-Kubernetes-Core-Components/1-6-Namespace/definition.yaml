@@ -1,0 +1,42 @@
+kubectl create namespace dev
+
+cat <<EOF>> ns-defintion.yaml 
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev
+EOF
+
+#kubectl create -f ns-defintion.yaml --namespace=dev
+
+kubectl run nginx --image=nginx -n dev
+
+kubectl config set-context --current --namespace=dev
+
+kubectl delete pod nginx -n dev
+
+cat << EOF | kubectl create -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: dev
+  name: myapp-deployment
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+  replicas: 3
+  selector:
+    matchLabels:
+      type: front-end
+EOF

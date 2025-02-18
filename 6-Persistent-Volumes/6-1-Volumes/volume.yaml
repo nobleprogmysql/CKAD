@@ -1,0 +1,25 @@
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-number-generator
+  labels:
+    app: blue
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["/bin/sh","-c"]
+    args: ["shuf -i 0-100 -n 1 >> /opt/number.out;"]
+    volumeMounts:
+    - mountPath: /opt
+      name: data-volume
+  volumes:
+  - name: data-volume
+    hostPath: 
+      path: /opt
+      type: Directory
+EOF
+
+# Go to node on which pod is scheduled and check /opt/number.out file
+cat /opt/number.out

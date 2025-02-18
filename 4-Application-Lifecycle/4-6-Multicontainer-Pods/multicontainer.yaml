@@ -1,0 +1,18 @@
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp
+  labels:
+    name: simple-webapp
+spec:
+  containers:
+  - name: simple-webapp
+    image: nginx
+    ports:
+    - containerPort: 8080
+  - name: busybox
+    image: busybox
+EOF
+
+kubectl describe pod simple-webapp

@@ -1,0 +1,9 @@
+kubectl get pods -n kube-system
+sudo cat /etc/kubernetes/manifests/kube-controller-manager.yaml
+ps -aux | grep kub-controller-manager
+
+sudo cat /etc/kubernetes/manifests/kube-scheduler.yaml
+
+ps aux | grep kubelet
+
+kubectl get ds -n kube-system (to see kube-proxy)

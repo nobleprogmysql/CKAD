@@ -1,0 +1,35 @@
+cat <<EOF | kubectl create -f - 
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-replicaset
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+  replicas: 6
+  selector:
+    matchLabels:
+      type: front-end
+EOF
+
+
+kubectl get replicaset
+kubectl describe replicaset myapp-replicaset
+kubectl scale --replicas=6 replicaset myapp-replicaset
+kubectl scale --replicas=6 -f rc-def.yaml
+
+kubectl edit replicaset myapp-replicaset
+press i to open in insert mode and then update replicas from 2 to 4
+to save: press ESC
+:wq! (enter)

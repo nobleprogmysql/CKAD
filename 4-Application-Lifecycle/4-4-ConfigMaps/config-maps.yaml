@@ -1,0 +1,29 @@
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  APP_COLOR: blue
+  APP_MOD: prod
+EOF
+
+
+kubectl describe configmaps
+kubectl get configmaps
+
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp-color
+spec:
+ containers:
+ - name: simple-webapp-color
+   image: nginx
+   ports:
+   - containerPort: 8080
+   envFrom:
+   - configMapRef:
+       name: app-config
+EOF
