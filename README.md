@@ -1,4 +1,4 @@
-# Clone the code repo by running command: git clone https://github.com/nobleprogdwpterraform/cka-kubernetes-administrator.git
+# Clone the code repo by running command: git clone https://github.com/nobleprogmysql/CKAD.git
 # go to Downloads and code repository (cka)
 # run vagrant up (to bring 3 nodes up, 1 master node and 2 worker nodes setup)
 
