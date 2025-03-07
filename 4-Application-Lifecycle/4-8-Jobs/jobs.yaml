@@ -1,0 +1,23 @@
+cat <<EOF | kubectl create -f -
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: simple-job
+  labels:
+    app: myapp
+    type: front-end
+spec: 
+  completions: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: ubuntu
+          image: ubuntu
+          command: ['expr','3','+','2']
+EOF
+
+
+kubectl get jobs
+kubectl describe job simple-job
+kubectl logs 

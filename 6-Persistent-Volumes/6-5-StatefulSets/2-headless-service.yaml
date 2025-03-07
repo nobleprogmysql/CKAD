@@ -1,0 +1,20 @@
+cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-server
+spec:
+  clusterIP: None  # This makes the service "headless"
+  selector:
+    app: web-server
+  ports:
+    - port: 80
+      targetPort: 80
+EOF
+
+kubectl exec -it web-server-0 -- /bin/bash
+curl web-server-0.web-server.default.svc.cluster.local
+
+# Or if you have deployed in dev namespace
+
+curl web-server-0.web-server.default.svc.cluster.local

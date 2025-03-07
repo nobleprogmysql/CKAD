@@ -1,0 +1,22 @@
+cat <<EOF | kubectl create -f -
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: email-cron-job
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      completions: 3
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: ubuntu
+              image: ubuntu
+              command: ['expr','3','+','2']
+EOF
+
+kubectl get cronjobs
+kubectl describe cronjob email-cron-job
+kubectl logs

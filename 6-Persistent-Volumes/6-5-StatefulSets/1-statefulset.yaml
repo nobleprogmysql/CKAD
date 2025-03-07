@@ -1,0 +1,25 @@
+cat <<EOF | kubectl create -f -
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web-server
+spec:
+  serviceName: web-server
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-server
+  template:
+    metadata:
+      labels:
+        app: web-server
+    spec:
+      containers:
+      - name: web-server
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+EOF
+
+kubectl describe statefulset web-server
+kubectl get pods
